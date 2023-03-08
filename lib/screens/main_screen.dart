@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:rasool/data.dart';
 import 'package:unicons/unicons.dart';
 
@@ -170,16 +171,48 @@ class _SavedItemsState extends State<SavedItems> {
     return ListView.builder(
       itemCount: savedItems.toSet().length,
       itemBuilder: (context, index) {
-        return GestureDetector(
-          onHorizontalDragDown: (details) {
-            setState(() {
-              savedItems.remove(details);
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            padding: const EdgeInsets.all(8),
-            color: Colors.white70,
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(8),
+          width: double.infinity,
+          color: Colors.white70,
+          child: Slidable(
+            endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+              SlidableAction(
+                onPressed: (context) {
+                  setState(() {
+                    var removed = savedItems[index];
+                    savedItems.removeAt(index);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Undo"),
+                          IconButton(
+                            icon: Icon(
+                              Icons.undo,
+                              color: Colors.white70,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                savedItems.add(removed);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      duration: Duration(seconds: 3),
+                      backgroundColor: Colors.redAccent,
+                      elevation: 0,
+                    ));
+                  });
+                },
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
+              ),
+            ]),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
