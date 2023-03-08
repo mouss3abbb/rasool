@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:rasool/data.dart';
+import 'package:rasool/glass_effect.dart';
 import 'package:unicons/unicons.dart';
 
 var rand = Random();
@@ -38,43 +39,37 @@ class _MainScreenState extends State<MainScreen>
         height: double.infinity,
         child: selectedIndex == 1 ? customInfo() : const SavedItems(),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          color: Colors.green,
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 0;
-                  });
-                },
-                icon: Icon(selectedIndex == 0
+      bottomNavigationBar: GlassBox(
+        child: BottomNavigationBar(
+          currentIndex: selectedIndex,
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey[700],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              label: "Saved",
+              icon: Icon(
+                selectedIndex == 0
                     ? CupertinoIcons.bookmark_fill
-                    : CupertinoIcons.bookmark),
-                color: selectedIndex == 0
-                    ? Colors.greenAccent[100]
-                    : Colors.white70,
-                iconSize: selectedIndex == 0 ? 40 : 20,
+                    : CupertinoIcons.bookmark,
+                size: selectedIndex == 0 ? 25 : 20,
               ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 1;
-                  });
-                },
-                icon: Icon(selectedIndex == 1
-                    ? FeatherIcons.bookOpen
-                    : FeatherIcons.book),
-                color: selectedIndex == 1
-                    ? Colors.greenAccent[100]
-                    : Colors.white70,
-                iconSize: selectedIndex == 1 ? 40 : 20,
+            ),
+            BottomNavigationBarItem(
+              label: "Home",
+              icon: Icon(
+                selectedIndex == 1 ? FeatherIcons.bookOpen : FeatherIcons.book,
+                size: selectedIndex == 1 ? 25 : 20,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -187,9 +182,9 @@ class _SavedItemsState extends State<SavedItems> {
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Undo"),
+                          const Text("Undo"),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.undo,
                               color: Colors.white70,
                             ),
@@ -201,7 +196,7 @@ class _SavedItemsState extends State<SavedItems> {
                           ),
                         ],
                       ),
-                      duration: Duration(seconds: 3),
+                      duration: const Duration(seconds: 3),
                       backgroundColor: Colors.redAccent,
                       elevation: 0,
                     ));
